@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superbill-api
+  namespace: superbill
+  labels:
+    app: superbill-api
+spec:
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: superbill-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: superbill-api
+    spec:
+      containers:
+        - name: api
+          image: acrsuperbilldev24522.azurecr.io/superbill-api:dev-main-{APP-REPO-COMMIT-ID}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://0.0.0.0:8080"
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: superbill-conn
+                  key: ConnectionStrings__DefaultConnection

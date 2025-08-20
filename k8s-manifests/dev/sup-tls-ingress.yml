@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: superbill
+  namespace: superbill
+  labels:
+    app: superbill-api
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - superbillapid.zayniq.org
+      secretName: superbill-tls
+    - hosts:
+        - superbilluid.zayniq.org
+      secretName: superbill-tls
+  rules:
+    - host: superbillapid.zayniq.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: superbill-api
+                port:
+                  number: 80
+    - host: superbilluid.zayniq.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: superbill-api
+                port:
+                  number: 80
