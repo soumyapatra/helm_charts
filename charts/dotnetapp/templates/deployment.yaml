@@ -51,6 +51,11 @@ spec:
           env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: {{ printf "%s-db-conn-secret" (.Values.appName | default .Release.Name) | trunc 63 | trimSuffix "-" }}
+                  key: ConnectionStrings__DefaultConnection
           ports:
               containerPort: {{ .Values.service.targetPort }}
           {{- with .Values.livenessProbe }}

@@ -11,11 +11,11 @@ autoscaling:
 env:
 - name: ASPNETCORE_URLS
   value: "http://0.0.0.0:8080"
-- name: ConnectionStrings__DefaultConnection
-  valueFrom:
-    secretKeyRef:
-      name: superbill-conn
-      key: ConnectionStrings__DefaultConnection
+
+secret:
+  tls_cert: "TLS_CERT"
+  tls_key: "TLS_KEY"
+  db_connection: "DB_CONN"
 
 ingress:
   enabled: true
