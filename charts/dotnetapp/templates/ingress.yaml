@@ -2,7 +2,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "dotnetapp.fullname" . }}
+  name: {{ printf "%s-ingress" (.Values.app.name | default .Release.Name) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "dotnetapp.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -35,7 +36,7 @@ spec:
             {{- end }}
             backend:
               service:
-                name: {{ include "dotnetapp.fullname" $ }}
+                name: {{ printf "%s-service" (default $.Release.Name $.Values.app.name) | trunc 63 | trimSuffix "-" }}
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}

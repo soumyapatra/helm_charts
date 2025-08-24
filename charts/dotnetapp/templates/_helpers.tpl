@@ -48,6 +48,7 @@ Selector labels
 {{- define "dotnetapp.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "dotnetapp.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: {{ .Release.Name }}
 {{- end }}
 
 {{/*
